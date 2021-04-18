@@ -1,0 +1,21 @@
+{
+  "name": "jira-list-value",
+  "version": "1.0.0",
+  "description": "A blookmarklet script which lists your issue values within a date range on JIRA.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel index.js -d dist && bookmarklet --demo dist/index.js dist/bookmarklet.html"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.13.14",
+    "@babel/core": "^7.13.15",
+    "@babel/preset-env": "^7.13.15",
+    "babel-preset-minify": "^0.5.1"
+  },
+  "dependencies": {
+    "bookmarklet": "^3.0.0"
+  }
+}
