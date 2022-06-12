@@ -1,14 +1,12 @@
 function getTimeFieldValue(a) { return a.fields.resolutiondate; }
 function getTimeField(a) { return new Date(getTimeFieldValue(a)).getTime(); }
+function formatFirstDay(date, monthOffset = 1) { return `${date.getYear() + 1900}-${date.getMonth() + monthOffset}-1`; }
 
 function getResolvedByDate() {
-    const minDate = prompt('Enter min date. (resolved >= minDate)');
-    const maxDate = prompt('Enter max date. (resolved < maxDate)');
+    const minDate = prompt('Enter min date. (resolved >= minDate)', formatFirstDay(new Date()));
+    const maxDate = prompt('Enter max date. (resolved < maxDate)', formatFirstDay(new Date(minDate), 2));
     const apiUrl = '/rest/api/2/search?filter=-4&jql=assignee in (currentUser()) AND status %3D Resolved AND ' +
                    `resolved >= "${minDate}" AND resolved < "${maxDate}" order by resolutiondate DESC`;
-
-    const hourlyRate = parseInt(prompt('Enter the hourly rate. (leave empty to hide hour count)'));
-    const showHours = hourlyRate > 0;
 
     console.log(apiUrl)
 
@@ -16,10 +14,8 @@ function getResolvedByDate() {
         .then(response => response.json())
         .then(function (data) {
             const issues = data.issues.sort((a, b) => getTimeField(a) - getTimeField(b));
-            const entries = issues.map(x => 
-                `${x.key}: ${x.fields.summary} (${x.fields.customfield_10025})` + 
-                (showHours ? ` (${(parseInt(x.fields.customfield_10025) / hourlyRate).toFixed(1).replace(/\.?0+$/, '')})` : ''));
-            const total = data.issues.map(x => x.fields.customfield_10025).reduce((a, b) => a + b, 0);
+            const entries = issues.map(x => `${x.key}: ${x.fields.summary} (${x.fields.customfield_11241})`);
+            const total = data.issues.map(x => x.fields.customfield_11241).reduce((a, b) => a + b, 0);
 
             const message = [
                 entries.join('\n'),
