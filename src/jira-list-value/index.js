@@ -22,6 +22,7 @@ function getResolvedByDate() {
         .then(function (data) {
             const issues = data
                 .issues
+                .filter(x => x.fields[PRICE_FIELD])
                 .sort((a,b) => a.key > b.key ? 1 : -1); // Keys are unique no equation handling.
             let entries = issues.map(x => `${x.key}: ${x.fields.summary} (${x.fields[PRICE_FIELD]})`);
             
